@@ -1,0 +1,136 @@
+{
+  "project_name": "StudioMix - Dinámica Día de las Madres",
+  "app_type": "landing_page",
+  "file_structure": "single_html_file",
+  "typography": {
+    "font_family": "'Montserrat', sans-serif",
+    "weights": {
+      "regular": 400,
+      "bold": 700,
+      "black": 900
+    },
+    "cdn_link": "<link href='https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap' rel='stylesheet'>"
+  },
+  "colors": {
+    "palette": {
+      "primary": "#D81B60",
+      "primary_hover": "#AD1457",
+      "secondary": "#F8BBD0",
+      "background": "#FFF5F8",
+      "surface": "#FFFFFF",
+      "text_main": "#1A1A1A",
+      "text_muted": "#555555",
+      "border": "#FCE4EC",
+      "success": "#4CAF50",
+      "error": "#D32F2F"
+    },
+    "gradients": {
+      "hero_overlay": "linear-gradient(180deg, rgba(255,245,248,0) 0%, #FFF5F8 100%)",
+      "card_shimmer": "linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.1) 100%)"
+    }
+  },
+  "layout_strategy": {
+    "container_width": "max-width: 1200px;",
+    "spacing": {
+      "section_padding": "padding: 80px 24px;",
+      "element_gap": "gap: 24px;"
+    },
+    "mobile_first": true,
+    "grid_system": "CSS Grid (Bento style for features) & Flexbox (Layouts)"
+  },
+  "visual_enhancers": {
+    "shadows": {
+      "soft": "0 4px 20px rgba(216, 27, 96, 0.1)",
+      "card": "0 10px 40px rgba(0,0,0,0.08)",
+      "floating": "0 20px 60px rgba(216, 27, 96, 0.25)"
+    },
+    "border_radius": {
+      "standard": "12px",
+      "large": "24px",
+      "pill": "9999px"
+    },
+    "glassmorphism": "background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.3);"
+  },
+  "image_urls": {
+    "hero_bg": "https://images.unsplash.com/photo-1694299352873-0c29d862e87a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxtb3RoZXIlMjBkYXVnaHRlciUyMGxhdWdoaW5nJTIwd2FybSUyMGxpZ2h0fGVufDB8fHx8MTc3MjQwMTcxN3ww&ixlib=rb-4.1.0&q=85",
+    "templates": [
+      {
+        "id": "tpl_floral",
+        "url": "https://images.unsplash.com/photo-1762860498242-404acb9f6090?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHw0fHxlbGVnYW50JTIwZmxvcmFsJTIwYmFja2dyb3VuZCUyMG1pbmltYWxpc3QlMjBwaW5rfGVufDB8fHx8MTc3MjQwMTcxOHww&ixlib=rb-4.1.0&q=85",
+        "name": "Floral Elegante"
+      },
+      {
+        "id": "tpl_soft",
+        "url": "https://images.unsplash.com/photo-1770650776344-c2f4d469f727?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHxlbGVnYW50JTIwZmxvcmFsJTIwYmFja2dyb3VuZCUyMG1pbmltYWxpc3QlMjBwaW5rfGVufDB8fHx8MTc3MjQwMTcxOHww&ixlib=rb-4.1.0&q=85",
+        "name": "Rosa Suave"
+      },
+      {
+        "id": "tpl_marble",
+        "url": "https://images.unsplash.com/photo-1638043008124-9268465173b7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzN8MHwxfHNlYXJjaHw0fHxhYnN0cmFjdCUyMHdhdGVyY29sb3IlMjB0ZXh0dXJlJTIwc29mdCUyMHBpbmt8ZW58MHx8fHwxNzcyNDAxNzE5fDA&ixlib=rb-4.1.0&q=85",
+        "name": "Textura Mármol"
+      },
+      {
+        "id": "tpl_minimal",
+        "url": "https://images.unsplash.com/photo-1536228626716-10328b4879e3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NjV8MHwxfHNlYXJjaHwzfHxtaW5pbWFsaXN0JTIwd2hpdGUlMjBnZW9tZXRyaWMlMjB0ZXh0dXJlfGVufDB8fHx8MTc3MjQwMTcxOXww&ixlib=rb-4.1.0&q=85",
+        "name": "Blanco Minimal"
+      },
+      {
+        "id": "tpl_abstract",
+        "url": "https://images.unsplash.com/photo-1770650776158-c019e6d440be?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwyfHxlbGVnYW50JTIwZmxvcmFsJTIwYmFja2dyb3VuZCUyMG1pbmltYWxpc3QlMjBwaW5rfGVufDB8fHx8MTc3MjQwMTcxOHww&ixlib=rb-4.1.0&q=85",
+        "name": "Abstracto Moderno"
+      }
+    ]
+  },
+  "components": {
+    "navbar": {
+      "style": "Glassmorphism sticky top, logo placeholder (StudioMix), Links: Home, Indicaciones, Plantilla, Registro",
+      "mobile": "Hamburger menu with smooth fade-in overlay"
+    },
+    "hero": {
+      "style": "Split layout or Centered. Big Typography 'DÍCELO CON AMOR A MAMÁ'. Background image with soft overlay.",
+      "cta": "Primary Button: 'Crear Tarjeta'"
+    },
+    "instructions": {
+      "style": "2-Column Grid. Left: Big Number steps (1, 2, 3). Right: Descriptive text with icons.",
+      "icons": "Use SVG icons inline for: Select, Write, Share"
+    },
+    "template_carousel": {
+      "style": "Horizontal scroll snap. Each item is a card preview. Active state scales up (scale: 1.05).",
+      "interaction": "Click to select template. Update 'Active Template' state."
+    },
+    "card_editor": {
+      "layout": "Flex wrap. Left: Live Preview (The selected image + Overlay Text). Right: Textarea input + Controls.",
+      "features": [
+        "Textarea for dedication",
+        "Font size slider",
+        "Color picker (White/Black/Pink)",
+        "Generate Button (html2canvas)",
+        "Share Button (Web Share API)"
+      ]
+    }
+  },
+  "technical_requirements": {
+    "single_file": true,
+    "libraries": [
+      "https://html2canvas.hertzen.com/dist/html2canvas.min.js"
+    ],
+    "js_logic": [
+      "State management for 'selectedTemplate' and 'userMessage'",
+      "Live DOM manipulation to update the preview card text",
+      "html2canvas function to capture the '#card-preview' div",
+      "Web Share API implementation with fallback to simple download"
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Create a SINGLE file named 'index.html' in /app.",
+    "Embed all CSS in <style> tags and all JS in <script> tags at the end of body.",
+    "Use Montserrat font for everything.",
+    "Ensure high contrast and accessibility.",
+    "The 'Card Preview' must be a specific DIV with position:relative. The background image is the selected template. The text is absolute positioned over it.",
+    "When 'Generar Imagen' is clicked, use html2canvas to capture ONLY that div.",
+    "Add a 'loading' state during image generation.",
+    "Do NOT use any other frameworks (No React, No Tailwind - write raw CSS).",
+    "Use CSS Variables for colors to make it easy to tweak.",
+    "Add 'data-testid' to all buttons and inputs."
+  ]
+}
