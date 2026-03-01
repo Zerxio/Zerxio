@@ -1143,7 +1143,7 @@
 
     .lm-carousel-wrapper {
         width: 95%;
-        height: 450px;
+        height: 480px;
     }
 
     .lm-carousel-btn {
@@ -1164,7 +1164,6 @@
     }
 
     .lm-btn-use-template {
-        bottom: 60px;
         padding: 10px 24px;
         font-size: 12px;
     }
