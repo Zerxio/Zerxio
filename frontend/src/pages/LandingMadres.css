@@ -648,8 +648,10 @@
 }
 
 .lm-btn-use-template {
-    position: absolute;
-    bottom: 80px;
+    position: relative;
+    bottom: auto;
+    margin-top: auto;
+    margin-bottom: 20px;
     background: var(--lm-color-primary);
     color: var(--lm-text-light);
     padding: 12px 32px;
