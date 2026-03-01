@@ -1,181 +1,1958 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#000000" />
-        <meta name="description" content="A product of emergent.sh" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet" />
-        <!--
-        manifest.json provides metadata used when your web app is installed on a
-        user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-        -->
-        <!--
-        Notice the use of %PUBLIC_URL% in the tags above.
-        It will be replaced with the URL of the `public` folder during the build.
-        Only files inside the `public` folder can be referenced from the HTML.
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Crea y personaliza tarjetas digitales para el Día de las Madres - StudioMix">
+    <title>Dinámica Día de las Madres | StudioMix</title>
+    
+    <!-- Google Fonts - Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- html2canvas CDN -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
-        Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-        work correctly both with client-side routing and a non-root public URL.
-        Learn how to configure a non-root public URL by running `npm run build`.
-        -->
-        <title>Emergent | Fullstack App</title>
-        <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
-        <script src="https://assets.emergent.sh/scripts/emergent-main.js"></script>
-        <!--
-        These two scripts have been added for the Visual Edits, please do not edit or remove them
-        -->
-        <script>
-            // Only load visual edit scripts when inside an iframe
-            if (window.self !== window.top) {
-                // Load debug monitor script
-                var debugMonitorScript = document.createElement('script');
-                debugMonitorScript.src = 'https://assets.emergent.sh/scripts/debug-monitor.js';
-                document.head.appendChild(debugMonitorScript);
+    <style>
+        /* ============================================
+           CSS VARIABLES - Paleta de colores
+           ============================================ */
+        :root {
+            /* Colores principales */
+            --color-primary: #D81B60;
+            --color-primary-hover: #AD1457;
+            --color-primary-light: #F8BBD0;
+            --color-secondary: #FCE4EC;
+            
+            /* Fondos */
+            --bg-main: #FFF5F8;
+            --bg-white: #FFFFFF;
+            --bg-dark: #1A1A1A;
+            
+            /* Textos */
+            --text-dark: #1A1A1A;
+            --text-muted: #555555;
+            --text-light: #FFFFFF;
+            
+            /* Sombras */
+            --shadow-soft: 0 4px 20px rgba(216, 27, 96, 0.1);
+            --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.08);
+            --shadow-floating: 0 20px 60px rgba(216, 27, 96, 0.25);
+            
+            /* Border radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 24px;
+            --radius-pill: 9999px;
+            
+            /* Transiciones */
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
 
-                // Configure Tailwind
-                window.tailwind = window.tailwind || {};
-                tailwind.config = {
-                    corePlugins: { preflight: false },
-                };
+        /* ============================================
+           RESET Y ESTILOS BASE
+           ============================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-                // Load Tailwind CDN
-                var tailwindScript = document.createElement('script');
-                tailwindScript.src = 'https://cdn.tailwindcss.com';
-                document.head.appendChild(tailwindScript);
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            color: var(--text-dark);
+            background-color: var(--bg-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+
+        /* ============================================
+           NAVBAR - Barra de navegación
+           ============================================ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            transition: var(--transition-normal);
+        }
+
+        .navbar.scrolled {
+            box-shadow: var(--shadow-soft);
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-placeholder {
+            width: 140px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .navbar-links a {
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-dark);
+            padding: 8px 0;
+            position: relative;
+            transition: var(--transition-fast);
+        }
+
+        .navbar-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-primary);
+            transition: var(--transition-fast);
+        }
+
+        .navbar-links a:hover {
+            color: var(--color-primary);
+        }
+
+        .navbar-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--text-dark);
+            transition: var(--transition-fast);
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(16px);
+            padding: 24px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: var(--transition-normal);
+        }
+
+        .mobile-menu.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .mobile-menu a {
+            font-weight: 500;
+            font-size: 16px;
+            padding: 12px 0;
+            display: block;
+            border-bottom: 1px solid var(--color-secondary);
+        }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            width: 100vw;
+            height: 600px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-top: 72px;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1603983856087-c175061451de?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzh8MHwxfHNlYXJjaHwxfHxwaW5rJTIwcm9zZXMlMjBib3VxdWV0JTIwZWxlZ2FudHxlbnwwfHx8fDE3NzI0MDE3Njd8MA&ixlib=rb-4.1.0&q=85');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                180deg,
+                rgba(26, 26, 26, 0.5) 0%,
+                rgba(26, 26, 26, 0.7) 100%
+            );
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 24px;
+            max-width: 900px;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 6vw, 4.5rem);
+            font-weight: 900;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 16px;
+            animation: fadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        .hero-cta {
+            margin-top: 32px;
+            animation: fadeInUp 1s ease 0.4s forwards;
+            opacity: 0;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--color-primary);
+            color: var(--text-light);
+            padding: 16px 40px;
+            border-radius: var(--radius-pill);
+            font-weight: 700;
+            font-size: 16px;
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-floating);
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-hover);
+            transform: translateY(-2px);
+        }
+
+        /* ============================================
+           INDICACIONES - Bloque explicativo
+           ============================================ */
+        .indicaciones {
+            padding: 80px 24px;
+            background: var(--bg-white);
+        }
+
+        .indicaciones-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .indicaciones-content h2 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            color: var(--text-dark);
+            margin-bottom: 24px;
+        }
+
+        .indicaciones-content h2 span {
+            color: var(--color-primary);
+        }
+
+        .indicaciones-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .step-content h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .step-content p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .indicaciones-image {
+            position: relative;
+        }
+
+        .indicaciones-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+        }
+
+        .indicaciones-image::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 100%;
+            height: 100%;
+            background: var(--color-secondary);
+            border-radius: var(--radius-lg);
+            z-index: -1;
+        }
+
+        /* ============================================
+           CARRUSEL DE PLANTILLAS
+           ============================================ */
+        .plantillas {
+            padding: 80px 24px;
+            background: var(--bg-main);
+        }
+
+        .plantillas-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 48px;
+        }
+
+        .plantillas-header h2 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            margin-bottom: 16px;
+        }
+
+        .plantillas-header h2 span {
+            color: var(--color-primary);
+        }
+
+        .plantillas-header p {
+            color: var(--text-muted);
+        }
+
+        .carousel-wrapper {
+            width: 90%;
+            max-width: 600px;
+            height: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .carousel {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* Plantillas individuales - Cada una con diseño único */
+        .template {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Plantilla 1: Floral Elegante */
+        .template-floral {
+            background: linear-gradient(135deg, #FFF0F5 0%, #FFE4EC 100%);
+        }
+
+        .template-floral::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(216, 27, 96, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .template-floral::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(248, 187, 208, 0.5) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        /* Plantilla 2: Rosa Suave */
+        .template-rosa {
+            background: linear-gradient(180deg, #FFFFFF 0%, #FCE4EC 100%);
+            border: 8px solid var(--color-primary-light);
+        }
+
+        .template-rosa .decorative-line {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--color-primary);
+        }
+
+        /* Plantilla 3: Mármol */
+        .template-marmol {
+            background: linear-gradient(135deg, #F5F5F5 0%, #E8E8E8 50%, #FAFAFA 100%);
+        }
+
+        .template-marmol::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1638043008124-9268465173b7?w=600') center/cover;
+            opacity: 0.15;
+        }
+
+        /* Plantilla 4: Minimal Blanco */
+        .template-minimal {
+            background: #FFFFFF;
+        }
+
+        .template-minimal .corner-accent {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 3px solid var(--color-primary);
+        }
+
+        .template-minimal .corner-accent.top-left {
+            top: 20px;
+            left: 20px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .template-minimal .corner-accent.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            border-left: none;
+            border-top: none;
+        }
+
+        /* Plantilla 5: Abstracto */
+        .template-abstract {
+            background: linear-gradient(45deg, #1A1A1A 0%, #2D2D2D 100%);
+            color: var(--text-light);
+        }
+
+        .template-abstract::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--color-primary) 0%, transparent 70%);
+            opacity: 0.3;
+        }
+
+        /* Contenido común de las plantillas */
+        .template-header {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            color: var(--color-primary);
+            position: relative;
+            z-index: 2;
+        }
+
+        .template-abstract .template-header {
+            color: var(--color-primary-light);
+        }
+
+        .template-title {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .template-message {
+            font-size: 16px;
+            text-align: center;
+            max-width: 400px;
+            line-height: 1.8;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: inherit;
+            position: relative;
+            z-index: 2;
+        }
+
+        .template-message.placeholder {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .template-abstract .template-message.placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .template-footer {
+            position: absolute;
+            bottom: 40px;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            z-index: 2;
+        }
+
+        .template-abstract .template-footer {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .btn-use-template {
+            position: absolute;
+            bottom: 80px;
+            background: var(--color-primary);
+            color: var(--text-light);
+            padding: 12px 32px;
+            border-radius: var(--radius-pill);
+            font-weight: 600;
+            font-size: 14px;
+            transition: var(--transition-normal);
+            z-index: 10;
+        }
+
+        .btn-use-template:hover {
+            background: var(--color-primary-hover);
+            transform: scale(1.05);
+        }
+
+        /* Controles del carrusel */
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            background: var(--bg-white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition-fast);
+            z-index: 10;
+        }
+
+        .carousel-btn:hover {
+            background: var(--color-primary);
+            color: var(--text-light);
+        }
+
+        .carousel-btn.prev {
+            left: -24px;
+        }
+
+        .carousel-btn.next {
+            right: -24px;
+        }
+
+        .carousel-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--color-secondary);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .carousel-dot.active {
+            background: var(--color-primary);
+            transform: scale(1.2);
+        }
+
+        /* ============================================
+           EDITOR DE TARJETA
+           ============================================ */
+        .editor-section {
+            padding: 0 24px 80px;
+            background: var(--bg-main);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .editor-section.active {
+            display: block;
+        }
+
+        .editor-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .editor-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .editor-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .editor-header p {
+            color: var(--text-muted);
+        }
+
+        .editor-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .editor-preview {
+            position: relative;
+        }
+
+        .preview-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        /* Contenedor de la tarjeta para html2canvas */
+        .card-preview-container {
+            width: 100%;
+            aspect-ratio: 4/5;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .card-preview {
+            width: 100%;
+            height: 100%;
+        }
+
+        .editor-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .control-group textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 16px;
+            border: 2px solid var(--color-secondary);
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 15px;
+            resize: vertical;
+            transition: var(--transition-fast);
+        }
+
+        .control-group textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .control-group textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .char-counter {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: right;
+        }
+
+        .btn-generate {
+            background: var(--color-primary);
+            color: var(--text-light);
+            padding: 16px 32px;
+            border-radius: var(--radius-pill);
+            font-weight: 700;
+            font-size: 16px;
+            transition: var(--transition-normal);
+            width: 100%;
+        }
+
+        .btn-generate:hover {
+            background: var(--color-primary-hover);
+        }
+
+        .btn-generate:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        /* ============================================
+           DESCARGA Y COMPARTIR
+           ============================================ */
+        .share-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .share-section.active {
+            display: block;
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid var(--color-secondary);
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-download {
+            flex: 1;
+            min-width: 200px;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 16px 32px;
+            border-radius: var(--radius-pill);
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: var(--transition-normal);
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .whatsapp-share {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .whatsapp-share input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--color-secondary);
+            border-radius: var(--radius-pill);
+            font-family: inherit;
+            font-size: 14px;
+            transition: var(--transition-fast);
+        }
+
+        .whatsapp-share input:focus {
+            outline: none;
+            border-color: #25D366;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: var(--text-light);
+            padding: 16px 32px;
+            border-radius: var(--radius-pill);
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: var(--transition-normal);
+        }
+
+        .btn-whatsapp:hover {
+            background: #128C7E;
+        }
+
+        /* ============================================
+           REGISTRO
+           ============================================ */
+        .registro {
+            padding: 80px 24px;
+            background: var(--bg-white);
+        }
+
+        .registro-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .registro h2 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            margin-bottom: 16px;
+        }
+
+        .registro h2 span {
+            color: var(--color-primary);
+        }
+
+        .registro p {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .registro-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .registro-form input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--color-secondary);
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 15px;
+            transition: var(--transition-fast);
+        }
+
+        .registro-form input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .btn-registro {
+            background: var(--color-primary);
+            color: var(--text-light);
+            padding: 16px 32px;
+            border-radius: var(--radius-pill);
+            font-weight: 700;
+            font-size: 16px;
+            transition: var(--transition-normal);
+            margin-top: 8px;
+        }
+
+        .btn-registro:hover {
+            background: var(--color-primary-hover);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .footer p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .footer a {
+            color: var(--color-primary-light);
+            text-decoration: underline;
+        }
+
+        /* ============================================
+           ANIMACIONES
+           ============================================ */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
             }
-        </script>
-    </head>
-    <body>
-        <noscript>You need to enable JavaScript to run this app.</noscript>
-        <div id="root"></div>
-        <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+            to {
+                opacity: 1;
+            }
+        }
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-        <a
-            id="emergent-badge"
-            target="_blank"
-            href="https://app.emergent.sh/?utm_source=emergent-badge"
-            style="
-                display: inline-flex !important;
-                box-sizing: border-box;
-                width: 178px;
+        @keyframes typewriter {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .text-animated {
+            animation: typewriter 0.6s ease forwards;
+        }
+
+        /* Loading State */
+        .loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            border: 3px solid transparent;
+            border-top-color: var(--text-light);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+        @media (max-width: 992px) {
+            .indicaciones-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .indicaciones-image {
+                order: -1;
+            }
+
+            .indicaciones-image::before {
+                display: none;
+            }
+
+            .editor-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .hero {
+                height: 500px;
+                margin-top: 72px;
+            }
+
+            .carousel-wrapper {
+                width: 95%;
+                height: 450px;
+            }
+
+            .carousel-btn {
+                width: 40px;
                 height: 40px;
-                padding: 8px 12px 8px 12px;
-                align-items: center !important;
-                gap: 8px;
-                border-radius: 50px !important;
-                background: #000 !important;
-                position: fixed !important;
-                bottom: 16px;
-                right: 16px;
-                text-decoration: none;
-                font-family: -apple-system, BlinkMacSystemFont,
-                    &quot;Segoe UI&quot;, Roboto, Oxygen, Ubuntu, Cantarell,
-                    &quot;Open Sans&quot;, &quot;Helvetica Neue&quot;,
-                    sans-serif !important;
-                font-size: 12px !important;
-                z-index: 9999 !important;
-            "
-        >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M15.5702 8.13142C15.7729 8.0412 16.0007 8.18878 15.9892 8.4103C15.8374 11.3192 14.0965 14.0405 11.2531 15.3065C8.40964 16.5725 5.2224 16.0453 2.95912 14.2117C2.78676 14.072 2.82955 13.804 3.03219 13.7137L4.95677 12.8568C5.04866 12.8159 5.15446 12.823 5.24204 12.8725C6.73377 13.7153 8.59176 13.8649 10.2772 13.1145C11.9626 12.3641 13.0947 10.8833 13.4665 9.21075C13.4883 9.11256 13.5539 9.02918 13.6457 8.98827L15.5702 8.13142Z" fill="white"/>
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M15.3066 4.74698L15.5067 5.19653C15.5759 5.35178 15.5061 5.53366 15.3508 5.60278L1.29992 11.8586C1.14467 11.9278 0.962794 11.8579 0.893675 11.7027L0.701732 11.2716L0.693457 11.2531C-1.10317 7.21778 0.711626 2.49007 4.74692 0.693443C8.78221 -1.10318 13.51 0.711693 15.3066 4.74698ZM2.82356 8.55367C2.63552 8.63739 2.41991 8.51617 2.40853 8.31065C2.28373 6.05724 3.53858 3.85787 5.72286 2.88536C7.90715 1.91286 10.3813 2.45199 11.9724 4.05256C12.1175 4.19854 12.0633 4.43988 11.8753 4.5236L2.82356 8.55367Z" fill="white"/>
-            </svg>
-            <p
-                style="
-                    color: #FFF !important;
-                    font-family: 'Inter', sans-serif !important;
-                    font-size: 13px !important;
-                    font-style: normal !important;
-                    font-weight: 600 !important;
-                    line-height: 20px !important;
-                    margin: 0 !important;
-                    white-space: nowrap !important;
-                "
-            >
-                Made with Emergent
-            </p>
-        </a>
-        <script>
-            !(function (t, e) {
-                var o, n, p, r;
-                e.__SV ||
-                    ((window.posthog = e),
-                    (e._i = []),
-                    (e.init = function (i, s, a) {
-                        function g(t, e) {
-                            var o = e.split(".");
-                            2 == o.length && ((t = t[o[0]]), (e = o[1])),
-                                (t[e] = function () {
-                                    t.push(
-                                        [e].concat(
-                                            Array.prototype.slice.call(
-                                                arguments,
-                                                0,
-                                            ),
-                                        ),
-                                    );
-                                });
-                        }
-                        ((p = t.createElement("script")).type =
-                            "text/javascript"),
-                            (p.crossOrigin = "anonymous"),
-                            (p.async = !0),
-                            (p.src =
-                                s.api_host.replace(
-                                    ".i.posthog.com",
-                                    "-assets.i.posthog.com",
-                                ) + "/static/array.js"),
-                            (r =
-                                t.getElementsByTagName(
-                                    "script",
-                                )[0]).parentNode.insertBefore(p, r);
-                        var u = e;
-                        for (
-                            void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
-                                u.people = u.people || [],
-                                u.toString = function (t) {
-                                    var e = "posthog";
-                                    return (
-                                        "posthog" !== a && (e += "." + a),
-                                        t || (e += " (stub)"),
-                                        e
-                                    );
-                                },
-                                u.people.toString = function () {
-                                    return u.toString(1) + ".people (stub)";
-                                },
-                                o =
-                                    "init me ws ys ps bs capture je Di ks register register_once register_for_session unregister unregister_for_session Ps getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey canRenderSurveyAsync identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty Es $s createPersonProfile Is opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing Ss debug xs getPageViewId captureTraceFeedback captureTraceMetric".split(
-                                        " ",
-                                    ),
-                                n = 0;
-                            n < o.length;
-                            n++
-                        )
-                            g(u, o[n]);
-                        e._i.push([i, s, a]);
-                    }),
-                    (e.__SV = 1));
-            })(document, window.posthog || []);
-            posthog.init("phc_xAvL2Iq4tFmANRE7kzbKwaSqp1HJjN7x48s3vr0CMjs", {
-                api_host: "https://us.i.posthog.com",
-                person_profiles: "identified_only", // or 'always' to create profiles for anonymous users as well,
-                session_recording: {
-                    recordCrossOriginIframes: true,
-                    capturePerformance: false,
-                },
+            }
+
+            .carousel-btn.prev {
+                left: -12px;
+            }
+
+            .carousel-btn.next {
+                right: -12px;
+            }
+
+            .template {
+                padding: 30px 20px;
+            }
+
+            .btn-use-template {
+                bottom: 60px;
+                padding: 10px 24px;
+                font-size: 12px;
+            }
+
+            .share-buttons {
+                flex-direction: column;
+            }
+
+            .editor-container {
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                height: 450px;
+            }
+
+            .carousel-wrapper {
+                height: 400px;
+            }
+
+            .template-title {
+                font-size: 1.25rem;
+            }
+
+            .template-message {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         NAVBAR - Barra de navegación
+         ============================================ -->
+    <nav class="navbar" data-testid="navbar">
+        <div class="navbar-container">
+            <!-- Logo placeholder - Reemplazar por SVG -->
+            <a href="#home" class="navbar-logo" data-testid="navbar-logo">
+                <div class="logo-placeholder">STUDIO MIX</div>
+            </a>
+
+            <!-- Links de navegación (Desktop) -->
+            <ul class="navbar-links" data-testid="navbar-links">
+                <li><a href="#home" data-testid="nav-home">Home</a></li>
+                <li><a href="#indicaciones" data-testid="nav-indicaciones">Indicaciones</a></li>
+                <li><a href="#plantillas" data-testid="nav-plantilla">Plantilla</a></li>
+                <li><a href="#registro" data-testid="nav-registro">Registro</a></li>
+            </ul>
+
+            <!-- Hamburger Menu (Mobile) -->
+            <div class="hamburger" data-testid="hamburger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" data-testid="mobile-menu">
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#indicaciones">Indicaciones</a></li>
+                <li><a href="#plantillas">Plantilla</a></li>
+                <li><a href="#registro">Registro</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ============================================
+         HERO SECTION
+         ============================================ -->
+    <section id="home" class="hero" data-testid="hero-section">
+        <div class="hero-background"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title" data-testid="hero-title">Dícelo con Amor a Mamá</h1>
+            <p class="hero-subtitle">Crea una tarjeta digital personalizada y sorprende a mamá este día especial</p>
+            <div class="hero-cta">
+                <a href="#plantillas" class="btn-primary" data-testid="hero-cta">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    Crear Tarjeta
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         INDICACIONES - Bloque explicativo
+         ============================================ -->
+    <section id="indicaciones" class="indicaciones" data-testid="indicaciones-section">
+        <div class="indicaciones-container">
+            <div class="indicaciones-content">
+                <h2>¿Cómo <span>funciona</span>?</h2>
+                <p>Crear una tarjeta especial para mamá es muy fácil. Sigue estos simples pasos y tendrás lista tu sorpresa en minutos.</p>
+                
+                <div class="indicaciones-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Elige tu plantilla</h3>
+                            <p>Explora nuestra galería de diseños exclusivos y selecciona el que más te guste.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Personaliza tu mensaje</h3>
+                            <p>Escribe una dedicatoria especial con todo tu cariño para mamá.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Descarga y comparte</h3>
+                            <p>Guarda tu tarjeta como imagen y envíala por WhatsApp directamente.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="indicaciones-image">
+                <img src="https://images.unsplash.com/photo-1771134572111-967700a8bb31?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzh8MHwxfHNlYXJjaHwyfHxwaW5rJTIwcm9zZXMlMjBib3VxdWV0JTIwZWxlZ2FudHxlbnwwfHx8fDE3NzI0MDE3Njd8MA&ixlib=rb-4.1.0&q=85" alt="Ramo de rosas para mamá">
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         GALERÍA / CARRUSEL DE PLANTILLAS
+         ============================================ -->
+    <section id="plantillas" class="plantillas" data-testid="plantillas-section">
+        <div class="plantillas-header">
+            <h2>Elige tu <span>plantilla</span></h2>
+            <p>Tenemos 5 diseños exclusivos para que encuentres el perfecto para mamá</p>
+        </div>
+
+        <div class="carousel-wrapper">
+            <div class="carousel" data-testid="carousel">
+                <div class="carousel-track" data-testid="carousel-track">
+                    
+                    <!-- Plantilla 1: Floral Elegante -->
+                    <div class="carousel-slide" data-template="floral">
+                        <div class="template template-floral" data-testid="template-1">
+                            <span class="template-header">Feliz Día de las Madres</span>
+                            <h2 class="template-title">Para la Mejor Mamá</h2>
+                            <p class="template-message placeholder">Tu mensaje aparecerá aquí...</p>
+                            <span class="template-footer">Con amor, de tu familia</span>
+                            <button class="btn-use-template" data-testid="btn-use-template-1">Usar esta plantilla</button>
+                        </div>
+                    </div>
+
+                    <!-- Plantilla 2: Rosa Suave -->
+                    <div class="carousel-slide" data-template="rosa">
+                        <div class="template template-rosa" data-testid="template-2">
+                            <div class="decorative-line"></div>
+                            <span class="template-header">10 de Mayo</span>
+                            <h2 class="template-title">Mamá, Eres Increíble</h2>
+                            <p class="template-message placeholder">Tu mensaje aparecerá aquí...</p>
+                            <span class="template-footer">Te quiero mucho</span>
+                            <button class="btn-use-template" data-testid="btn-use-template-2">Usar esta plantilla</button>
+                        </div>
+                    </div>
+
+                    <!-- Plantilla 3: Mármol -->
+                    <div class="carousel-slide" data-template="marmol">
+                        <div class="template template-marmol" data-testid="template-3">
+                            <span class="template-header">Día Especial</span>
+                            <h2 class="template-title">Gracias por Todo, Mamá</h2>
+                            <p class="template-message placeholder">Tu mensaje aparecerá aquí...</p>
+                            <span class="template-footer">Siempre en mi corazón</span>
+                            <button class="btn-use-template" data-testid="btn-use-template-3">Usar esta plantilla</button>
+                        </div>
+                    </div>
+
+                    <!-- Plantilla 4: Minimal Blanco -->
+                    <div class="carousel-slide" data-template="minimal">
+                        <div class="template template-minimal" data-testid="template-4">
+                            <div class="corner-accent top-left"></div>
+                            <div class="corner-accent bottom-right"></div>
+                            <span class="template-header">Felicidades</span>
+                            <h2 class="template-title">Te Amo, Mamá</h2>
+                            <p class="template-message placeholder">Tu mensaje aparecerá aquí...</p>
+                            <span class="template-footer">Tu hij@ que te adora</span>
+                            <button class="btn-use-template" data-testid="btn-use-template-4">Usar esta plantilla</button>
+                        </div>
+                    </div>
+
+                    <!-- Plantilla 5: Abstracto Moderno -->
+                    <div class="carousel-slide" data-template="abstract">
+                        <div class="template template-abstract" data-testid="template-5">
+                            <span class="template-header">Día de las Madres</span>
+                            <h2 class="template-title">Mamá, Eres Mi Todo</h2>
+                            <p class="template-message placeholder">Tu mensaje aparecerá aquí...</p>
+                            <span class="template-footer">Con todo mi amor</span>
+                            <button class="btn-use-template" data-testid="btn-use-template-5">Usar esta plantilla</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Controles del carrusel -->
+            <button class="carousel-btn prev" data-testid="carousel-prev">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <button class="carousel-btn next" data-testid="carousel-next">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Dots indicadores -->
+        <div class="carousel-dots" data-testid="carousel-dots">
+            <button class="carousel-dot active" data-index="0" data-testid="dot-0"></button>
+            <button class="carousel-dot" data-index="1" data-testid="dot-1"></button>
+            <button class="carousel-dot" data-index="2" data-testid="dot-2"></button>
+            <button class="carousel-dot" data-index="3" data-testid="dot-3"></button>
+            <button class="carousel-dot" data-index="4" data-testid="dot-4"></button>
+        </div>
+    </section>
+
+    <!-- ============================================
+         EDITOR DE TARJETA
+         ============================================ -->
+    <section class="editor-section" id="editor" data-testid="editor-section">
+        <div class="editor-container">
+            <div class="editor-header">
+                <h3>Personaliza tu tarjeta</h3>
+                <p>Escribe tu dedicatoria y genera tu tarjeta personalizada</p>
+            </div>
+
+            <div class="editor-grid">
+                <!-- Vista previa de la tarjeta -->
+                <div class="editor-preview">
+                    <p class="preview-label">Vista previa</p>
+                    <div class="card-preview-container">
+                        <div class="card-preview" id="card-preview" data-testid="card-preview">
+                            <!-- Aquí se clonará la plantilla seleccionada -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controles del editor -->
+                <div class="editor-controls">
+                    <div class="control-group">
+                        <label for="dedicatoria">Tu dedicatoria para mamá</label>
+                        <textarea 
+                            id="dedicatoria" 
+                            placeholder="Escribe aquí tu dedicatoria para mamá..."
+                            maxlength="300"
+                            data-testid="dedicatoria-textarea"
+                        ></textarea>
+                        <span class="char-counter"><span id="charCount">0</span>/300 caracteres</span>
+                    </div>
+
+                    <button class="btn-generate" id="btn-generate" data-testid="btn-generate">
+                        Generar Tarjeta
+                    </button>
+
+                    <!-- Sección de compartir (oculta inicialmente) -->
+                    <div class="share-section" id="share-section" data-testid="share-section">
+                        <p class="preview-label">¡Tu tarjeta está lista!</p>
+                        <div class="share-buttons">
+                            <button class="btn-download" id="btn-download" data-testid="btn-download">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                Descargar Tarjeta
+                            </button>
+                            
+                            <div class="whatsapp-share">
+                                <input 
+                                    type="tel" 
+                                    id="whatsapp-number" 
+                                    placeholder="+52 123 456 7890"
+                                    data-testid="whatsapp-input"
+                                >
+                                <button class="btn-whatsapp" id="btn-whatsapp" data-testid="btn-whatsapp">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                    </svg>
+                                    Compartir por WhatsApp
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         REGISTRO
+         ============================================ -->
+    <section id="registro" class="registro" data-testid="registro-section">
+        <div class="registro-container">
+            <h2>¿Quieres más <span>sorpresas</span>?</h2>
+            <p>Regístrate para recibir contenido exclusivo, plantillas nuevas y promociones especiales de StudioMix.</p>
+            
+            <form class="registro-form" id="registro-form" data-testid="registro-form">
+                <input 
+                    type="text" 
+                    placeholder="Tu nombre completo"
+                    id="registro-nombre"
+                    data-testid="registro-nombre"
+                    required
+                >
+                <input 
+                    type="email" 
+                    placeholder="Tu correo electrónico"
+                    id="registro-email"
+                    data-testid="registro-email"
+                    required
+                >
+                <input 
+                    type="tel" 
+                    placeholder="Tu número de teléfono (opcional)"
+                    id="registro-telefono"
+                    data-testid="registro-telefono"
+                >
+                <button type="submit" class="btn-registro" data-testid="btn-registro">
+                    Registrarme
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="footer" data-testid="footer">
+        <p>&copy; 2025 <a href="https://www.studiomix.com.mx" target="_blank">StudioMix</a>. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- ============================================
+         JAVASCRIPT
+         ============================================ -->
+    <script>
+        /**
+         * ============================================
+         * ESTADO DE LA APLICACIÓN
+         * ============================================
+         * Objeto que mantiene el estado global de la aplicación
+         */
+        const AppState = {
+            selectedTemplate: null,      // Plantilla seleccionada
+            currentSlide: 0,             // Índice del slide actual
+            totalSlides: 5,              // Total de slides
+            userMessage: '',             // Mensaje del usuario
+            cardGenerated: false         // Si la tarjeta ya fue generada
+        };
+
+        /**
+         * ============================================
+         * ELEMENTOS DEL DOM
+         * ============================================
+         * Caché de elementos para mejor rendimiento
+         */
+        const DOM = {
+            navbar: document.querySelector('.navbar'),
+            hamburger: document.querySelector('.hamburger'),
+            mobileMenu: document.querySelector('.mobile-menu'),
+            carouselTrack: document.querySelector('.carousel-track'),
+            carouselPrev: document.querySelector('.carousel-btn.prev'),
+            carouselNext: document.querySelector('.carousel-btn.next'),
+            carouselDots: document.querySelectorAll('.carousel-dot'),
+            useTemplateButtons: document.querySelectorAll('.btn-use-template'),
+            editorSection: document.querySelector('.editor-section'),
+            cardPreview: document.getElementById('card-preview'),
+            dedicatoriaInput: document.getElementById('dedicatoria'),
+            charCount: document.getElementById('charCount'),
+            btnGenerate: document.getElementById('btn-generate'),
+            shareSection: document.getElementById('share-section'),
+            btnDownload: document.getElementById('btn-download'),
+            whatsappInput: document.getElementById('whatsapp-number'),
+            btnWhatsapp: document.getElementById('btn-whatsapp'),
+            registroForm: document.getElementById('registro-form')
+        };
+
+        /**
+         * ============================================
+         * NAVEGACIÓN
+         * ============================================
+         */
+
+        /**
+         * Maneja el scroll para agregar estilos al navbar
+         */
+        function handleNavbarScroll() {
+            if (window.scrollY > 50) {
+                DOM.navbar.classList.add('scrolled');
+            } else {
+                DOM.navbar.classList.remove('scrolled');
+            }
+        }
+
+        /**
+         * Toggle del menú móvil
+         */
+        function toggleMobileMenu() {
+            DOM.hamburger.classList.toggle('active');
+            DOM.mobileMenu.classList.toggle('active');
+        }
+
+        /**
+         * Cierra el menú móvil al hacer clic en un enlace
+         */
+        function closeMobileMenu() {
+            DOM.hamburger.classList.remove('active');
+            DOM.mobileMenu.classList.remove('active');
+        }
+
+        /**
+         * ============================================
+         * CARRUSEL
+         * ============================================
+         */
+
+        /**
+         * Actualiza la posición del carrusel
+         * @param {number} index - Índice del slide a mostrar
+         */
+        function goToSlide(index) {
+            // Validar límites
+            if (index < 0) index = AppState.totalSlides - 1;
+            if (index >= AppState.totalSlides) index = 0;
+
+            AppState.currentSlide = index;
+            
+            // Mover el track del carrusel
+            DOM.carouselTrack.style.transform = `translateX(-${index * 100}%)`;
+            
+            // Actualizar dots
+            DOM.carouselDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
             });
-        </script>
-    </body>
+        }
+
+        /**
+         * Ir al slide anterior
+         */
+        function prevSlide() {
+            goToSlide(AppState.currentSlide - 1);
+        }
+
+        /**
+         * Ir al siguiente slide
+         */
+        function nextSlide() {
+            goToSlide(AppState.currentSlide + 1);
+        }
+
+        /**
+         * ============================================
+         * SELECCIÓN DE PLANTILLA
+         * ============================================
+         */
+
+        /**
+         * Selecciona una plantilla y muestra el editor
+         * @param {Event} e - Evento del click
+         */
+        function selectTemplate(e) {
+            const button = e.target;
+            const slide = button.closest('.carousel-slide');
+            const template = slide.querySelector('.template');
+            
+            // Guardar la plantilla seleccionada
+            AppState.selectedTemplate = template.cloneNode(true);
+            
+            // Remover el botón de la copia
+            const btnInClone = AppState.selectedTemplate.querySelector('.btn-use-template');
+            if (btnInClone) btnInClone.remove();
+            
+            // Mostrar la plantilla en el preview
+            renderPreview();
+            
+            // Mostrar el editor
+            DOM.editorSection.classList.add('active');
+            
+            // Scroll suave al editor
+            setTimeout(() => {
+                DOM.editorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+            
+            // Resetear estado
+            AppState.cardGenerated = false;
+            DOM.shareSection.classList.remove('active');
+        }
+
+        /**
+         * Renderiza la vista previa de la plantilla
+         */
+        function renderPreview() {
+            DOM.cardPreview.innerHTML = '';
+            
+            if (AppState.selectedTemplate) {
+                const previewTemplate = AppState.selectedTemplate.cloneNode(true);
+                previewTemplate.style.width = '100%';
+                previewTemplate.style.height = '100%';
+                DOM.cardPreview.appendChild(previewTemplate);
+            }
+        }
+
+        /**
+         * ============================================
+         * EDITOR DE TARJETA
+         * ============================================
+         */
+
+        /**
+         * Actualiza el contador de caracteres
+         */
+        function updateCharCount() {
+            const count = DOM.dedicatoriaInput.value.length;
+            DOM.charCount.textContent = count;
+            AppState.userMessage = DOM.dedicatoriaInput.value;
+        }
+
+        /**
+         * Genera la tarjeta con el mensaje personalizado
+         */
+        function generateCard() {
+            const message = DOM.dedicatoriaInput.value.trim();
+            
+            if (!message) {
+                alert('Por favor, escribe una dedicatoria para mamá.');
+                DOM.dedicatoriaInput.focus();
+                return;
+            }
+            
+            if (!AppState.selectedTemplate) {
+                alert('Por favor, selecciona una plantilla primero.');
+                return;
+            }
+            
+            // Actualizar el mensaje en la vista previa
+            const messageElement = DOM.cardPreview.querySelector('.template-message');
+            if (messageElement) {
+                messageElement.classList.remove('placeholder');
+                messageElement.textContent = message;
+                
+                // Agregar animación
+                messageElement.classList.add('text-animated');
+                setTimeout(() => {
+                    messageElement.classList.remove('text-animated');
+                }, 600);
+            }
+            
+            // Marcar como generada y mostrar opciones de compartir
+            AppState.cardGenerated = true;
+            DOM.shareSection.classList.add('active');
+            
+            // Scroll a la sección de compartir
+            setTimeout(() => {
+                DOM.shareSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        }
+
+        /**
+         * ============================================
+         * DESCARGA DE IMAGEN
+         * ============================================
+         */
+
+        /**
+         * Descarga la tarjeta como imagen PNG usando html2canvas
+         */
+        async function downloadCard() {
+            if (!AppState.cardGenerated) {
+                alert('Primero genera tu tarjeta con una dedicatoria.');
+                return;
+            }
+            
+            // Agregar estado de carga
+            DOM.btnDownload.classList.add('loading');
+            DOM.btnDownload.disabled = true;
+            const originalText = DOM.btnDownload.innerHTML;
+            DOM.btnDownload.innerHTML = '<span>Generando...</span>';
+            
+            try {
+                // Capturar el elemento de la tarjeta
+                const canvas = await html2canvas(DOM.cardPreview, {
+                    scale: 2,  // Mayor calidad
+                    useCORS: true,
+                    backgroundColor: null,
+                    logging: false
+                });
+                
+                // Convertir a imagen PNG
+                const imageData = canvas.toDataURL('image/png');
+                
+                // Crear enlace de descarga temporal
+                const downloadLink = document.createElement('a');
+                downloadLink.href = imageData;
+                downloadLink.download = 'tarjeta-dia-de-las-madres.png';
+                
+                // Forzar descarga
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                
+            } catch (error) {
+                console.error('Error al generar imagen:', error);
+                alert('Hubo un error al generar la imagen. Intenta de nuevo.');
+            } finally {
+                // Remover estado de carga
+                DOM.btnDownload.classList.remove('loading');
+                DOM.btnDownload.disabled = false;
+                DOM.btnDownload.innerHTML = originalText;
+            }
+        }
+
+        /**
+         * ============================================
+         * COMPARTIR POR WHATSAPP
+         * ============================================
+         */
+
+        /**
+         * Comparte por WhatsApp usando Web Share API o fallback
+         */
+        async function shareWhatsApp() {
+            const phoneNumber = DOM.whatsappInput.value.replace(/\s+/g, '').replace(/[^0-9+]/g, '');
+            
+            // Mensaje predefinido
+            const shareMessage = '¡Hola! Te he preparado una sorpresa especial por el Día de las Madres. Mírala aquí: www.studiomix.com.mx/dinamicadiezdemayo';
+            
+            // Verificar si Web Share API está disponible
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'Feliz Día de las Madres',
+                        text: shareMessage,
+                        url: 'https://www.studiomix.com.mx/dinamicadiezdemayo'
+                    });
+                    return;
+                } catch (err) {
+                    // Si el usuario cancela o hay error, usar fallback
+                    console.log('Web Share cancelado, usando fallback');
+                }
+            }
+            
+            // Fallback: Abrir WhatsApp directamente
+            const encodedMessage = encodeURIComponent(shareMessage);
+            let whatsappUrl;
+            
+            if (phoneNumber && phoneNumber.length >= 10) {
+                // Con número específico
+                whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+            } else {
+                // Sin número (abre selector de contacto)
+                whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+            }
+            
+            // Abrir en nueva pestaña
+            window.open(whatsappUrl, '_blank');
+        }
+
+        /**
+         * ============================================
+         * REGISTRO (SIMULADO)
+         * ============================================
+         */
+
+        /**
+         * Maneja el envío del formulario de registro
+         * NOTA: Esta función es un placeholder para la integración con backend PHP
+         * @param {Event} e - Evento del submit
+         */
+        function handleRegistro(e) {
+            e.preventDefault();
+            
+            const formData = {
+                nombre: document.getElementById('registro-nombre').value,
+                email: document.getElementById('registro-email').value,
+                telefono: document.getElementById('registro-telefono').value
+            };
+            
+            // Llamar a la función de guardado (simulada)
+            guardarEnBaseDeDatos(formData);
+        }
+
+        /**
+         * FUNCIÓN PLACEHOLDER PARA BACKEND
+         * ============================================
+         * Esta función simula el guardado en base de datos.
+         * En producción, aquí se haría una petición fetch() al backend PHP.
+         * 
+         * Ejemplo de implementación real:
+         * 
+         * async function guardarEnBaseDeDatos(datos) {
+         *     try {
+         *         const response = await fetch('/api/registro.php', {
+         *             method: 'POST',
+         *             headers: {
+         *                 'Content-Type': 'application/json',
+         *             },
+         *             body: JSON.stringify(datos)
+         *         });
+         *         
+         *         if (!response.ok) throw new Error('Error en el servidor');
+         *         
+         *         const result = await response.json();
+         *         // Manejar respuesta exitosa
+         *         
+         *     } catch (error) {
+         *         console.error('Error:', error);
+         *         // Manejar error
+         *     }
+         * }
+         * 
+         * @param {Object} datos - Datos del formulario
+         */
+        function guardarEnBaseDeDatos(datos) {
+            // SIMULACIÓN - Mostrar datos en consola
+            console.log('Datos del registro (simulado):', datos);
+            
+            // Mostrar mensaje de éxito simulado
+            alert('¡Gracias por registrarte! Pronto recibirás nuestras novedades.');
+            
+            // Limpiar formulario
+            DOM.registroForm.reset();
+        }
+
+        /**
+         * ============================================
+         * INICIALIZACIÓN
+         * ============================================
+         */
+
+        /**
+         * Inicializa todos los event listeners
+         */
+        function initEventListeners() {
+            // Navbar scroll
+            window.addEventListener('scroll', handleNavbarScroll);
+            
+            // Mobile menu
+            DOM.hamburger.addEventListener('click', toggleMobileMenu);
+            DOM.mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+            
+            // Carrusel
+            DOM.carouselPrev.addEventListener('click', prevSlide);
+            DOM.carouselNext.addEventListener('click', nextSlide);
+            DOM.carouselDots.forEach((dot, index) => {
+                dot.addEventListener('click', () => goToSlide(index));
+            });
+            
+            // Selección de plantilla
+            DOM.useTemplateButtons.forEach(btn => {
+                btn.addEventListener('click', selectTemplate);
+            });
+            
+            // Editor
+            DOM.dedicatoriaInput.addEventListener('input', updateCharCount);
+            DOM.btnGenerate.addEventListener('click', generateCard);
+            
+            // Descargar y compartir
+            DOM.btnDownload.addEventListener('click', downloadCard);
+            DOM.btnWhatsapp.addEventListener('click', shareWhatsApp);
+            
+            // Registro
+            DOM.registroForm.addEventListener('submit', handleRegistro);
+            
+            // Soporte para navegación con teclado en el carrusel
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') prevSlide();
+                if (e.key === 'ArrowRight') nextSlide();
+            });
+        }
+
+        /**
+         * Función principal de inicialización
+         */
+        function init() {
+            initEventListeners();
+            goToSlide(0);  // Iniciar en el primer slide
+            console.log('StudioMix - Dinámica Día de las Madres inicializada');
+        }
+
+        // Iniciar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
 </html>
